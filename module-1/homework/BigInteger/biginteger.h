@@ -6,13 +6,13 @@
 
 class BigInteger{
 private:
-    const int MOD = 1000000000;//Просто константа для взятия модуля
     std::vector<int> digits;//Разряды числа
     bool sign;//Знак
     void cutzeros();//Обрезает ведущие нули и убирает минус у нуля
     BigInteger(bool s,const std::vector<int>& d);//Техничесикй конструктор с лобовой инициализацией переменных
 
 public:
+    static const int MOD = 1000000000;//Просто константа для взятия модуля
     BigInteger();//Создаёт 0
     BigInteger(long long x);//Создаёт из long long и всё что в него расширяется
     BigInteger(const BigInteger& x);//Конструктор копий

@@ -1,5 +1,21 @@
 #include <biginteger.h>
 
+std::vector<int> operator+ (std::vector<int> a, std::vector<int> b){
+    std::vector<int>c (a);
+    for (int i = 0; i<b.size(); ++i)
+        c.push_back(b[i]);
+    return c;
+}
+
+std::vector<int> operator* (std::vector<int> a, int b){
+    std::vector<int> c(a.size()+1,0);
+    for(int i = 0; i<a.size(); ++i){
+        c[i] = (c[i]+a[i]*b)%BigInteger::MOD;
+        c[i+1] = (c[i]+a[i]*b)/BigInteger::MOD;
+    }
+    return c;
+}
+
 void BigInteger::cutzeros(){
     while (digits.back()==0&&digits.size()>1)
         digits.pop_back();
@@ -163,13 +179,12 @@ BigInteger BigInteger::operator* (const BigInteger& x) const{
     if (sign&&!x.sign) return -((-*this)*x);
     if (!sign&&x.sign) return -(*this*(-x));
     if (x==0) return 0;
-    if (x%2==0){
-        BigInteger y = *this*(x/2);
-        return y+y;
-    } else {
-        BigInteger y = *this*(x/2);
-        return y+y+*this;
+    BigInteger result;
+    for (int i = 0; i<x.digits.size(); ++i){
+        result+=BigInteger(false,std::vector<int>(i,0)+digits*x.digits[i]);
     }
+    result.cutzeros();
+    return result;
 }
 
 BigInteger BigInteger::operator/ (const BigInteger& x) const{
