@@ -6,40 +6,40 @@
 
 class BigInteger{
 private:
-    std::vector<int> digits;//ГђГ Г§Г°ГїГ¤Г» Г·ГЁГ±Г«Г 
-    bool sign;//Г‡Г­Г ГЄ
-    void cutzeros();//ГЋГЎГ°ГҐГ§Г ГҐГІ ГўГҐГ¤ГіГ№ГЁГҐ Г­ГіГ«ГЁ ГЁ ГіГЎГЁГ°Г ГҐГІ Г¬ГЁГ­ГіГ± Гі Г­ГіГ«Гї
-    BigInteger(bool s,const std::vector<int>& d);//Г’ГҐГµГ­ГЁГ·ГҐГ±ГЁГЄГ© ГЄГ®Г­Г±ГІГ°ГіГЄГІГ®Г° Г± Г«Г®ГЎГ®ГўГ®Г© ГЁГ­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГҐГ© ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г»Гµ
+    const int MOD = 1000000000;//Просто константа для взятия модуля
+    std::vector<int> digits;//Разряды числа
+    bool sign;//Знак
+    void cutzeros();//Обрезает ведущие нули и убирает минус у нуля
+    BigInteger(bool s,const std::vector<int>& d);//Техничесикй конструктор с лобовой инициализацией переменных
 
 public:
-    static const int MOD = 1000000000;//ГЏГ°Г®Г±ГІГ® ГЄГ®Г­Г±ГІГ Г­ГІГ  Г¤Г«Гї ГўГ§ГїГІГЁГї Г¬Г®Г¤ГіГ«Гї
-    BigInteger();//Г‘Г®Г§Г¤Г ВёГІ 0
-    BigInteger(long long x);//Г‘Г®Г§Г¤Г ВёГІ ГЁГ§ long long ГЁ ГўГ±Вё Г·ГІГ® Гў Г­ГҐГЈГ® Г°Г Г±ГёГЁГ°ГїГҐГІГ±Гї
-    BigInteger(const BigInteger& x);//ГЉГ®Г­Г±ГІГ°ГіГЄГІГ®Г° ГЄГ®ГЇГЁГ©
-    BigInteger(std::string x);//ГЉГ®Г­Г±ГІГ°ГіГЄГІГ®Г° ГЁГ§ Г±ГІГ°Г®ГЄГЁ (Г  int ГІГ ГЄ Г­ГҐ ГіГ¬ГҐГҐГІ)
-    ~BigInteger();//Г„ГҐГ±ГІГ°ГіГЄГІГ®Г°
-    std::string to_string() const;//ГЏГҐГ°ГҐГўГ®Г¤ Гў string
-    BigInteger& operator=(const BigInteger& x);//ГЋГЇГҐГ°Г ГІГ®Г° ГЇГ°ГЁГ±ГўГ ГЁГўГ Г­ГЁГї
-    //ГЃГ«Г®ГЄ Г±Г°Г ГўГ­ГҐГ­ГЁГ©
+    BigInteger();//Создаёт 0
+    BigInteger(long long x);//Создаёт из long long и всё что в него расширяется
+    BigInteger(const BigInteger& x);//Конструктор копий
+    BigInteger(std::string x);//Конструктор из строки (а int так не умеет)
+    ~BigInteger();//Деструктор
+    std::string to_string() const;//Перевод в string
+    BigInteger& operator=(const BigInteger& x);//Оператор присваивания
+    //Блок сравнений
     bool operator== (const BigInteger& x) const;
     bool operator!= (const BigInteger& x) const;
     bool operator< (const BigInteger& x) const;
     bool operator> (const BigInteger& x) const;
     bool operator<= (const BigInteger& x) const;
     bool operator>= (const BigInteger& x) const;
-    //ГЃГ«Г®ГЄ ГЁГ­ГЄГ°ГҐГ¬ГҐГ­ГІГ®Гў ГЁ Г¤ГҐГЄГ°ГҐГ¬ГҐГ­ГІГ®Гў
+    //Блок инкрементов и декрементов
     BigInteger& operator++ ();
     BigInteger operator++ (int);
     BigInteger& operator-- ();
     BigInteger operator-- (int);
-    //ГЃГ«Г®ГЄ Г Г°ГЁГґГ¬ГҐГІГЁГЄГЁ
+    //Блок арифметики
     BigInteger operator- () const;
     BigInteger operator+ (const BigInteger& x) const;
     BigInteger operator- (const BigInteger& x) const;
     BigInteger operator* (const BigInteger& x) const;
     BigInteger operator/ (const BigInteger& x) const;
     BigInteger operator% (const BigInteger& x) const;
-    //ГЃГ«Г®ГЄ ГЇГ°ГЁГ±ГўГ ГЁГўГ ГІГҐГ«ГјГ­Г®Г© Г Г°ГЁГґГ¬ГҐГІГЁГЄГЁ
+    //Блок присваивательной арифметики
     BigInteger& operator+= (const BigInteger& x);
     BigInteger& operator-= (const BigInteger& x);
     BigInteger& operator*= (const BigInteger& x);
