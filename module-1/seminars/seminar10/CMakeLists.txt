@@ -2,10 +2,10 @@
 cmake_minimum_required(VERSION 3.16)
 
 # именуем проект: значение сохраняется в переменную PROJECT_NAME
-project("seminar1")
+project("seminar10")
 
 # включаем файлы в поддиректория в сборку проекта
-add_subdirectory(index_of)
-add_subdirectory(int2type)
-add_subdirectory(static_assert)
-add_subdirectory(type2type)
+add_subdirectory(convertibility)
+add_subdirectory(local_classes)
+add_subdirectory(type_selection)
+add_subdirectory(type_traits)
