@@ -188,7 +188,7 @@ void task::list::swap(list& other){
 void task::list::remove(const int& value){
     if (x==0) return;
     list* ptr = p;
-    while(p!=nullptr){
+    while(ptr!=nullptr){
         list* next = ptr->n;
         if (ptr->x==value){
             if (ptr->p!=nullptr)
@@ -202,7 +202,10 @@ void task::list::remove(const int& value){
             ptr->n = nullptr;
             delete ptr;
             --x;
-            if (x==0) n = this;
+            if (x==0){
+                n = this;
+                p = nullptr;
+            }
         }
         ptr = next;
     }
