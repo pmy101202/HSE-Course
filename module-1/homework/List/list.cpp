@@ -185,7 +185,7 @@ void task::list::swap(list& other){
     std::swap(x,other.x);
 }
 
-void task::list::remove(const int& value){
+void task::list::remove(const int value){
     if (x==0) return;
     list* ptr = p;
     while(ptr!=nullptr){

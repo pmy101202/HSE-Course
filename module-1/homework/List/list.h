@@ -33,7 +33,7 @@ public:
     void swap(list& other);//
 
 
-    void remove(const int& value);//
+    void remove(const int value);//
     void unique();//
     void sort();//
     void print() const;//
