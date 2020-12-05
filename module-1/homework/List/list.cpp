@@ -63,6 +63,7 @@ void task::list::clear(){
     if (n==this) return;
     while (p!=n){
         n = n->p;
+        n->n->p = nullptr;
         delete n->n;
         n->n = nullptr;
     }
