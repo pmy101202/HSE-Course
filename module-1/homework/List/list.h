@@ -9,7 +9,6 @@ class list {
 public:
 
     list();//
-    list(int a);//
     list(size_t count, const int& value = int());//
     list(const list& other);
 
@@ -43,6 +42,7 @@ private:
 
     bool main();//
     void divide(list& l, list& r);//
+    list(int a, char c);//
 
     int x;
     list *p, *n;//n == next, n == nazad, p == previous, p == pered
