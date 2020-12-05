@@ -17,7 +17,7 @@ task::list::list(){
     x = 0;
 }
 
-task::list::list(int a, char c){
+task::list::list(int a, char c, char c1){
     p = nullptr, n = nullptr;
     x = a;
 }
@@ -25,10 +25,10 @@ task::list::list(int a, char c){
 task::list::list(size_t count, const int& value){
     x = count;
     if (count>0){
-        n = new list(value,'v');
+        n = new list(value,'v','v');
         p = n;
         for (int i = 0; i<count-1; ++i){
-            n->n = new list(value,'v');
+            n->n = new list(value,'v','v');
             n->n->p = n;
             n = n->n;
         }
@@ -79,7 +79,7 @@ task::list& task::list::operator=(const task::list& other){
     clear();
     x = other.x;
     if (x>0){
-        p = new list(other.p->x,'v');
+        p = new list(other.p->x,'v','v');
         n = p;
     } else {
         p = nullptr;
@@ -88,7 +88,7 @@ task::list& task::list::operator=(const task::list& other){
     }
     list* ptr = other.p->n;
     while (ptr!=nullptr){
-        n->n = new list(ptr->x,'v');
+        n->n = new list(ptr->x,'v','v');
         n->n->p = n;
         n = n->n;
         ptr = ptr->n;
@@ -118,11 +118,11 @@ const int& task::list::back() const{
 
 void task::list::push_back(const int& value){
     if (x==0){
-        n = new list(value,'v');
+        n = new list(value,'v','v');
         p = n;
         x = 1;
     } else {
-        n->n = new list(value,'v');
+        n->n = new list(value,'v','v');
         n->n->p = n;
         n = n->n;
         ++x;
@@ -146,11 +146,11 @@ void task::list::pop_back(){
 
 void task::list::push_front(const int& value){
     if (x==0){
-        p = new list(value,'v');
+        p = new list(value,'v','v');
         n = p;
         x = 1;
     } else {
-        p->p = new list(value,'v');
+        p->p = new list(value,'v','v');
         p->p->n = p;
         p = p->p;
         ++x;
@@ -272,7 +272,7 @@ void task::list::sort(){
 task::list::list(const task::list& other){
     x = other.x;
     if (x>0){
-        p = new list(other.p->x,'v');
+        p = new list(other.p->x,'v','v');
         n = p;
     } else {
         p = nullptr;
@@ -280,7 +280,7 @@ task::list::list(const task::list& other){
     }
     list* ptr = other.p->n;
     while (ptr!=nullptr){
-        n->n = new list(ptr->x,'v');
+        n->n = new list(ptr->x,'v','v');
         n->n->p = n;
         n = n->n;
         ptr = ptr->n;

@@ -42,7 +42,7 @@ private:
 
     bool main();//
     void divide(list& l, list& r);//
-    list(int a, char c);//
+    list(int a, char c, char c1);//
 
     int x;
     list *p, *n;//n == next, n == nazad, p == previous, p == pered
