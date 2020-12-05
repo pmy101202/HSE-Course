@@ -11,6 +11,7 @@ public:
     list();//
     list(int a);//
     list(size_t count, const int& value = int());//
+    list(const list& other);
 
     ~list();//
     list& operator=(const list& other);//
@@ -36,7 +37,7 @@ public:
     void remove(const int& value);//
     void unique();//
     void sort();//
-    void print();//
+    void print() const;//
 
 private:
 

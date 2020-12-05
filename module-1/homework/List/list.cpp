@@ -1,4 +1,4 @@
-#include <list.h>
+#include "list.h"
 
 
 size_t task::list::size() const{
@@ -32,6 +32,9 @@ task::list::list(size_t count, const int& value){
             n->n->p = n;
             n = n->n;
         }
+    } else {
+        n = this;
+        p = nullptr;
     }
 }
 
@@ -45,7 +48,7 @@ bool task::list::empty() const{
     return size()==0;
 }
 
-void task::list::print(){
+void task::list::print() const{
     if (empty())
         std::cout << "empty" << std::endl;
     else {
@@ -63,7 +66,6 @@ void task::list::clear(){
     if (n==this) return;
     while (p!=n){
         n = n->p;
-        n->n->p = nullptr;
         delete n->n;
         n->n = nullptr;
     }
@@ -73,13 +75,14 @@ void task::list::clear(){
     return;
 }
 
-task::list& task::list::operator=(const list& other){
+task::list& task::list::operator=(const task::list& other){
     clear();
     x = other.x;
     if (x>0){
         p = new list(other.p->x);
         n = p;
     } else {
+        p = nullptr;
         n = this;
         return *this;
     }
@@ -224,7 +227,7 @@ void task::list::unique(){
     }
 }
 
-void task::list::divide(list& l, list& r){
+void task::list::divide(task::list& l, task::list& r){
     l = list(), r = list();
     list* ptr = p;
     for (int i = 0; i<x; ++i){
@@ -263,5 +266,23 @@ void task::list::sort(){
             push_back(r.front());
             r.pop_front();
         }
+    }
+}
+
+task::list::list(const task::list& other){
+    x = other.x;
+    if (x>0){
+        p = new list(other.p->x);
+        n = p;
+    } else {
+        p = nullptr;
+        n = this;
+    }
+    list* ptr = other.p->n;
+    while (ptr!=nullptr){
+        n->n = new list(ptr->x);
+        n->n->p = n;
+        n = n->n;
+        ptr = ptr->n;
     }
 }
