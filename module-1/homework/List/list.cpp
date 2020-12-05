@@ -205,6 +205,7 @@ void task::list::remove(const int& value){
             if (x==0){
                 n = this;
                 p = nullptr;
+                break;
             }
         }
         ptr = next;
