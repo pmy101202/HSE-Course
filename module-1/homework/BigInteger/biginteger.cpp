@@ -1,17 +1,16 @@
-#include <biginteger.h>
+#include "biginteger.h"
 
 std::vector<int> operator+ (std::vector<int> a, std::vector<int> b){
-    std::vector<int>c (a);
     for (int i = 0; i<b.size(); ++i)
-        c.push_back(b[i]);
-    return c;
+        a.push_back(b[i]);
+    return a;
 }
 
 std::vector<int> operator* (std::vector<int> a, int b){
     std::vector<int> c(a.size()+1,0);
     for(int i = 0; i<a.size(); ++i){
-        c[i] = (c[i]+a[i]*b)%BigInteger::MOD;
-        c[i+1] = (c[i]+a[i]*b)/BigInteger::MOD;
+        c[i+1] = (c[i]+(long long)(a[i])*b)/BigInteger::MOD;
+        c[i] = (c[i]+(long long)(a[i])*b)%BigInteger::MOD;
     }
     return c;
 }
@@ -23,6 +22,7 @@ void BigInteger::cutzeros(){
 }
 
 BigInteger::BigInteger(bool s,const std::vector<int>& d):sign(s),digits(d){
+    cutzeros();
 }
 
 BigInteger::BigInteger(){
@@ -127,96 +127,37 @@ bool BigInteger::operator>= (const BigInteger& x) const{
     return !(*this<x);
 }
 
+bool BigInteger::absGreater(const BigInteger& x) const{
+    if (digits.size()>x.digits.size()) return true;
+    if (digits.size()<x.digits.size()) return false;
+    for (int i = digits.size()-1; i>=0; ++i){
+        if (digits[i]>x.digits[i]) return true;
+        if (digits[i]<x.digits[i]) return false;
+    }
+}
+
 BigInteger BigInteger::operator- () const{
     return BigInteger(!sign,digits);
 }
 
 BigInteger BigInteger::operator+ (const BigInteger& x) const{
-    if (!sign&&!x.sign){
-        BigInteger y(0);
-        std::vector<int> d1 = digits, d2 = x.digits;
-        y.digits.resize(1+std::max(d1.size(),d2.size()),0);
-        d1.resize(y.digits.size()-1,0);
-        d2.resize(y.digits.size()-1,0);
-        for (int i = 0; i<d1.size(); ++i){
-            y.digits[i]+=(y.digits[i]+d1[i]+d2[i])%MOD;
-            y.digits[i+1]+=(y.digits[i]+d1[i]+d2[i])/MOD;
-        }
-        y.cutzeros();
-        return y;
-    }
-    if (!sign&&x.sign){
-        if (*this>=abs(x)){
-            std::vector<int> d1 = digits, d2 = x.digits;
-            d1.resize(std::max(d1.size(),d2.size()),0);
-            d2.resize(std::max(d1.size(),d2.size()),0);
-            for (int i = 0; i<d1.size(); ++i){
-                d1[i]-=d2[i];
-                if (d1[i]<0){
-                    d1[i]+=MOD;
-                    --d1[i+1];
-                }
-            }
-            BigInteger y(false,d1);
-            y.cutzeros();
-            return y;
-        } else {
-            return -(-x-*this);
-        }
-    }
-    if (sign&&!x.sign)
-        return x+*this;
-    if (sign&&x.sign)
-        return -(-*this+(-x));
+    return BigInteger(*this)+=x;
 }
 
 BigInteger BigInteger::operator- (const BigInteger& x) const{
-    return *this+(-x);
+    return BigInteger(*this)-=x;
 }
 
 BigInteger BigInteger::operator* (const BigInteger& x) const{
-    if (sign&&x.sign) return (-*this)*(-x);
-    if (sign&&!x.sign) return -((-*this)*x);
-    if (!sign&&x.sign) return -(*this*(-x));
-    if (x==0) return 0;
-    BigInteger result;
-    for (int i = 0; i<x.digits.size(); ++i){
-        result+=BigInteger(false,std::vector<int>(i,0)+digits*x.digits[i]);
-    }
-    result.cutzeros();
-    return result;
+    return BigInteger(*this)*=x;
 }
 
 BigInteger BigInteger::operator/ (const BigInteger& x) const{
-    BigInteger y(*this);
-    if (sign&&x.sign) return (-*this)/(-x);
-    if (sign&&!x.sign) return -((-*this)/x);
-    if (!sign&&x.sign) return -(*this/(-x));
-    if (*this==0) return 0;
-    if (x==0) throw std::runtime_error("Dividing by zero");
-    if (x==2){
-        for (int i = 0; i<y.digits.size()-1; ++i)
-            y.digits[i] = y.digits[i+1]%2*MOD+y.digits[i]/2;
-        y.digits.back()=y.digits.back()/2;
-        y.cutzeros();
-        return y;
-    }
-    BigInteger l(0), r(*this+1), m;
-    while (r-l>1){
-        m = (l+r)/2;
-        if (m*x>*this)
-            r = m;
-        else
-            l = m;
-    }
-    return l;
+    return BigInteger(*this)/=x;
 }
 
 BigInteger BigInteger::operator% (const BigInteger& x) const{
-    if (x==2) return digits[0]%2;
-    if (*this==0) return 0;
-    if (x==0) throw std::runtime_error("Dividing by zero");
-    return *this-x*(*this/x);
+    return BigInteger(*this)%=x;
 }
 
 BigInteger& BigInteger::operator++ (){
@@ -240,28 +181,143 @@ BigInteger BigInteger::operator-- (int){
 }
 
 BigInteger& BigInteger::operator+= (const BigInteger& x){
-    *this = *this+x;
+    if (sign^x.sign){
+        if (absGreater(x)){
+            for (int i = 0; i<digits.size(); ++i){
+                if (i<x.digits.size())
+                    digits[i]-=x.digits[i];
+                if (digits[i]<0){
+                    digits[i]+=MOD;
+                    --digits[i+1];
+                }
+            }
+        } else {
+            sign = !sign;
+            digits.resize(x.digits.size(),0);
+            for (int i = 0; i<digits.size(); ++i){
+                digits[i] = x.digits[i] - digits[i];
+                if (digits[i]<0){
+                    digits[i]+=MOD;
+                    ++digits[i+1];
+                }
+            }
+        }
+    } else {
+        if (absGreater(x)){
+            digits.push_back(0);
+            for (int i = 0; i<digits.size(); ++i){
+                if (i<x.digits.size())
+                    digits[i]+=x.digits[i];
+                if (digits[i]>=MOD){
+                    digits[i]-=MOD;
+                    ++digits[i+1];
+                }
+            }
+        } else {
+            digits.resize(x.digits.size()+1,0);
+            for (int i = 0; i<digits.size()-1; ++i){
+                digits[i]+=x.digits[i];
+                if (digits[i]>=MOD){
+                    digits[i]-=MOD;
+                    ++digits[i+1];
+                }
+            }
+        }
+    }
+    cutzeros();
     return *this;
 }
 
 BigInteger& BigInteger::operator-= (const BigInteger& x){
-    *this = *this-x;
+    if (!sign^x.sign){
+        if (absGreater(x)){
+            for (int i = 0; i<digits.size(); ++i){
+                if (i<x.digits.size())
+                    digits[i]-=x.digits[i];
+                if (digits[i]<0){
+                    digits[i]+=MOD;
+                    --digits[i+1];
+                }
+            }
+        } else {
+            sign = !sign;
+            digits.resize(x.digits.size(),0);
+            for (int i = 0; i<digits.size(); ++i){
+                digits[i] = x.digits[i] - digits[i];
+                if (digits[i]<0){
+                    digits[i]+=MOD;
+                    ++digits[i+1];
+                }
+            }
+        }
+    } else {
+        if (absGreater(x)){
+            digits.push_back(0);
+            for (int i = 0; i<digits.size(); ++i){
+                if (i<x.digits.size())
+                    digits[i]+=x.digits[i];
+                if (digits[i]>=MOD){
+                    digits[i]-=MOD;
+                    ++digits[i+1];
+                }
+            }
+        } else {
+            digits.resize(x.digits.size()+1,0);
+            for (int i = 0; i<digits.size(); ++i){
+                digits[i]+=x.digits[i];
+                if (digits[i]>=MOD){
+                    digits[i]-=MOD;
+                    ++digits[i+1];
+                }
+            }
+        }
+    }
+    cutzeros();
     return *this;
 }
 
 BigInteger& BigInteger::operator*= (const BigInteger& x){
-    *this = *this*x;
+    sign = sign^x.sign;
+    std::vector<int> d(digits);
+    digits = std::vector<int>(1,0);
+    for (int i = 0; i<x.digits.size(); ++i){
+        *this+=BigInteger(sign,std::vector<int>(i,0)+d*x.digits[i]);
+    }
+    cutzeros();
     return *this;
 }
 
 BigInteger& BigInteger::operator/= (const BigInteger& x){
-    *this = *this/x;
+    bool sgn = sign^x.sign;
+    sign = x.sign;
+    if (x==0) throw std::runtime_error("dividing by zero");
+    if (x==2){
+        for (int i = digits.size()-1; i>0; --i){
+            if (digits[i]%2==1)
+                digits[i-1]+=MOD;
+            digits[i]/=2;
+        }
+        digits[0]/=2;
+        cutzeros();
+        return *this;
+    }
+    BigInteger l = 0, r = (*this>0)?*this+1:*this-1, m;
+    while (abs(r-l)>1){
+
+        m = (r+l)/2;
+        if (absGreater(m*x))
+            l = m;
+        else
+            r = m;
+    }
+    *this = m;
+    cutzeros();
+    sign = sgn;
     return *this;
 }
 
 BigInteger& BigInteger::operator%= (const BigInteger& x){
-    *this = *this%x;
-    return *this;
+    return *this-=*this/x*x;
 }
 
 std::ostream &operator<<(std::ostream& str, const BigInteger& x){

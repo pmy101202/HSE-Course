@@ -27,6 +27,7 @@ public:
     bool operator> (const BigInteger& x) const;
     bool operator<= (const BigInteger& x) const;
     bool operator>= (const BigInteger& x) const;
+    bool absGreater(const BigInteger& x) const;
     //Блок инкрементов и декрементов
     BigInteger& operator++ ();
     BigInteger operator++ (int);
