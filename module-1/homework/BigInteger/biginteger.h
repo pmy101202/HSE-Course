@@ -18,7 +18,7 @@ public:
     BigInteger(const BigInteger& x);//Конструктор копий
     BigInteger(std::string x);//Конструктор из строки (а int так не умеет)
     ~BigInteger();//Деструктор
-    std::string to_string() const;//Перевод в string
+    std::string toString() const;//Перевод в string
     BigInteger& operator=(const BigInteger& x);//Оператор присваивания
     //Блок сравнений
     bool operator== (const BigInteger& x) const;

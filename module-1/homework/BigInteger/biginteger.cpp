@@ -75,7 +75,7 @@ BigInteger::BigInteger(std::string x){
 
 BigInteger::~BigInteger(){};
 
-std::string BigInteger::to_string() const{
+std::string BigInteger::toString() const{
     std::string x = "";
     std::string s = "";
     if (sign) x = "-";
@@ -130,10 +130,11 @@ bool BigInteger::operator>= (const BigInteger& x) const{
 bool BigInteger::absGreater(const BigInteger& x) const{
     if (digits.size()>x.digits.size()) return true;
     if (digits.size()<x.digits.size()) return false;
-    for (int i = digits.size()-1; i>=0; ++i){
+    for (int i = digits.size()-1; i>=0; --i){
         if (digits[i]>x.digits[i]) return true;
         if (digits[i]<x.digits[i]) return false;
     }
+    return false;
 }
 
 BigInteger BigInteger::operator- () const{
@@ -301,16 +302,15 @@ BigInteger& BigInteger::operator/= (const BigInteger& x){
         cutzeros();
         return *this;
     }
-    BigInteger l = 0, r = (*this>0)?*this+1:*this-1, m;
+    BigInteger l = 0, r = (*this)*2, m;
     while (abs(r-l)>1){
-
         m = (r+l)/2;
-        if (absGreater(m*x))
+        if (absGreater(m*x)||m*x==*this)
             l = m;
         else
             r = m;
     }
-    *this = m;
+    *this = l;
     cutzeros();
     sign = sgn;
     return *this;
@@ -321,7 +321,7 @@ BigInteger& BigInteger::operator%= (const BigInteger& x){
 }
 
 std::ostream &operator<<(std::ostream& str, const BigInteger& x){
-    str << x.to_string();
+    str << x.toString();
     return str;
 };
 
