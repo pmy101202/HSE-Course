@@ -14,6 +14,7 @@ private:
 public:
     static const int MOD = 1000000000;//Просто константа для взятия модуля
     BigInteger();//Создаёт 0
+    BigInteger(int x);
     BigInteger(long long x);//Создаёт из long long и всё что в него расширяется
     BigInteger(const BigInteger& x);//Конструктор копий
     BigInteger(std::string x);//Конструктор из строки (а int так не умеет)
@@ -48,6 +49,7 @@ public:
     BigInteger& operator%= (const BigInteger& x);
 
     friend BigInteger abs(const BigInteger x);
+    explicit operator bool() const{ return *this!=0;};
 };
 
 std::ostream &operator<<(std::ostream& str, const BigInteger& x);

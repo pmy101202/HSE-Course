@@ -30,6 +30,17 @@ BigInteger::BigInteger(){
     sign = false;
 }
 
+BigInteger::BigInteger(int x){
+    sign = (x<0);
+    digits = std::vector<int>();
+    if (x<0) x=-x;
+    if (x==0) digits.push_back(0);
+    while (x>0){
+        digits.push_back(x%MOD);
+        x /= MOD;
+    }
+}
+
 BigInteger::BigInteger(long long x){
     sign = (x<0);
     digits = std::vector<int>();
@@ -336,3 +347,4 @@ BigInteger abs(const BigInteger x){
     if (x.sign) return -x;
     return x;
 }
+
