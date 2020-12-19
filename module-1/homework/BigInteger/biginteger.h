@@ -42,11 +42,11 @@ public:
     BigInteger operator/ (const BigInteger& x) const;
     BigInteger operator% (const BigInteger& x) const;
     //Блок присваивательной арифметики
-    BigInteger& operator+= (const BigInteger& x);
-    BigInteger& operator-= (const BigInteger& x);
-    BigInteger& operator*= (const BigInteger& x);
-    BigInteger& operator/= (const BigInteger& x);
-    BigInteger& operator%= (const BigInteger& x);
+    BigInteger& operator+= (const BigInteger x);
+    BigInteger& operator-= (const BigInteger x);
+    BigInteger& operator*= (const BigInteger x);
+    BigInteger& operator/= (const BigInteger x);
+    BigInteger& operator%= (const BigInteger x);
 
     friend BigInteger abs(const BigInteger x);
     explicit operator bool() const{ return *this!=0;};

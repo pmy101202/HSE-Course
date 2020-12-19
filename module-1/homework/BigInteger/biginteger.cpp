@@ -192,7 +192,7 @@ BigInteger BigInteger::operator-- (int){
     return x;
 }
 
-BigInteger& BigInteger::operator+= (const BigInteger& x){
+BigInteger& BigInteger::operator+= (const BigInteger x){
     if (sign^x.sign){
         if (absGreater(x)){
             for (int i = 0; i<digits.size(); ++i){
@@ -240,7 +240,7 @@ BigInteger& BigInteger::operator+= (const BigInteger& x){
     return *this;
 }
 
-BigInteger& BigInteger::operator-= (const BigInteger& x){
+BigInteger& BigInteger::operator-= (const BigInteger x){
     if (!sign^x.sign){
         if (absGreater(x)){
             for (int i = 0; i<digits.size(); ++i){
@@ -288,7 +288,7 @@ BigInteger& BigInteger::operator-= (const BigInteger& x){
     return *this;
 }
 
-BigInteger& BigInteger::operator*= (const BigInteger& x){
+BigInteger& BigInteger::operator*= (const BigInteger x){
     sign = sign^x.sign;
     std::vector<int> d(digits);
     digits = std::vector<int>(1,0);
@@ -299,7 +299,7 @@ BigInteger& BigInteger::operator*= (const BigInteger& x){
     return *this;
 }
 
-BigInteger& BigInteger::operator/= (const BigInteger& x){
+BigInteger& BigInteger::operator/= (const BigInteger x){
     bool sgn = sign^x.sign;
     sign = x.sign;
     if (x==0) throw std::runtime_error("dividing by zero");
@@ -327,7 +327,7 @@ BigInteger& BigInteger::operator/= (const BigInteger& x){
     return *this;
 }
 
-BigInteger& BigInteger::operator%= (const BigInteger& x){
+BigInteger& BigInteger::operator%= (const BigInteger x){
     return *this-=*this/x*x;
 }
 
