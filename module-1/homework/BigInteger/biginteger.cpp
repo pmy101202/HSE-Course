@@ -116,7 +116,7 @@ bool BigInteger::operator!= (const BigInteger& x) const{
 bool BigInteger::operator< (const BigInteger& x) const{
     if (sign&&!x.sign) return true;
     if (!sign&&x.sign) return false;
-    if (sign&&x.sign) return !(abs(*this)<abs(x));
+    if (sign&&x.sign) return absGreater(x);
     if (digits.size()<x.digits.size()) return true;
     if (digits.size()>x.digits.size()) return false;
     for (int i = digits.size()-1; i>=0; ++i){
