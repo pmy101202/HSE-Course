@@ -314,7 +314,7 @@ BigInteger& BigInteger::operator/= (const BigInteger x){
         return *this;
     }
     BigInteger l = 0, r = (*this)*2, m;
-    while (abs(r-l)>1){
+    while ((r-l).absGreater(1)){
         m = (r+l)/2;
         if (absGreater(m*x)||m*x==*this)
             l = m;
